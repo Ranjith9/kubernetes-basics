@@ -1,0 +1,80 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: db
+spec:
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        name: db-label
+    spec:
+      containers:
+      - image: mongo
+        name: db
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+          - name: my-data
+            mountPath: /data/db
+      restartPolicy: Always
+      volumes:
+        - name: my-data
+          persistentVolumeClaim:
+            claimName: db-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  ports:
+  - name: "27017"
+    port: 27017
+    targetPort: 27017
+  selector:
+    name: db-label
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: web-deploy
+spec:
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        name: web-label
+    spec:
+      containers:
+      - image: ranjith9/web-app:v2
+        name: web
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 1
+          timeoutSeconds: 1        
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  ports:
+  - name: "80"
+    port: 80
+    targetPort: 80
+  selector:
+    name: web-label
+  type: NodePort
+
