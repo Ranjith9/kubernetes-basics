@@ -22,6 +22,10 @@ kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/
 
 kubectl get pods --all-namespaces
 
+# If you want to run everything(pods) in the same VM use the command
+ 
+ kubectl taint nodes --all node-role.kubernetes.io/master-
+
 
 # application deployments
 clone the repo and go to "kubernetes-basics" directory and execute the files
