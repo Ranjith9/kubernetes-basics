@@ -35,3 +35,13 @@ kubectl create -f pvolume.yaml
 kubectl create -f deployment.yaml
 
 kubectl create -f autoscale.yaml
+
+
+# Browse the application
+
+kubectl get services       |  check the port for web service (30000 range)
+
+go to browser and type in url http://ip:port 
+
+
+// Good Luck //
