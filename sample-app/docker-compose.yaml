@@ -1,0 +1,21 @@
+version: "3"
+services:
+  web:
+      container_name: 'web'
+      image: 'ranjith9/web-app'
+      ports:
+        - "80:80"
+      depends_on:
+        - 'db'
+  db:
+      container_name: 'db'
+      image: 'mongo'
+      ports:
+        - "27017:27017"
+      volumes:
+        - "mine:/data/db"
+
+volumes:
+  mine:
+
+# Create a volume by name "mine" or replace the volume name that you have created in this file with "mine"
